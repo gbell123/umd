@@ -1,0 +1,16 @@
+#first example from the slides
+#shows the summation of all integers between 1 and 1000
+      irmovl $0,%eax    # sum = 0
+      irmovl $1,%ecx    # num = 1
+Loop: addl   %ecx,%eax  # sum += num
+      irmovl $1,%edx    # tmp = 1
+      addl   %edx,%ecx  # num++
+      irmovl $1000,%edx # lim = 1000
+      subl   %ecx,%edx  # if lim - num >= 0
+      jge    Loop       # loop again
+
+      wrint  %eax       # printf("%d", sum)
+      irmovl $10,%edx   # ch = '\n'
+      wrch   %edx       # printf("%c", ch)
+      halt      
+

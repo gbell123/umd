@@ -1,0 +1,23 @@
+#!/usr/bin/ruby
+
+COL_LIMIT = 80
+
+if ARGV.empty?
+  $stderr.puts "Usage: #{File.basename($0)} <file list>"
+  exit 64
+end
+
+failure = false
+
+ARGV.each do |filename|
+  IO.popen("expand #{Regexp.quote(filename)}") do |pipe|
+    while line = pipe.gets
+      line.chomp!
+      next if line.size <= COL_LIMIT
+      puts "(#{line.size}) #{filename}:#{pipe.lineno}:#{line}"
+      failure = true
+    end
+  end
+end
+
+exit 1 if failure

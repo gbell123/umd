@@ -1,0 +1,53 @@
+#!/bin/bash
+
+semester="fall2011"
+course_num="216"
+#if [ -z "$1" ]; then
+  #echo "Usage: setup_$course_num section_number"
+  #exit -1
+#fi
+section="0101"  # no sections must use an argument for their sec.
+	                       # because this semester all are in the 0101
+			       # section
+#[ -n "$1" ] && section="0101"  # what this line was was left for history 
+
+root_dir="/afs/glue/class/$semester/cmsc/$course_num"
+
+failures=0
+
+already_changed() {
+  echo "There appears to already be changes for 216 in your $1 file."
+}
+
+if ! grep -q '#216FLAG' "$HOME/.path"; then
+  echo "setenv PATH \"$root_dir/0101/public/bin:\${PATH}\" #216FLAG" >> "$HOME/.path"
+else
+  already_changed ".path"
+  failures=1
+fi
+
+if [ ! -e "$HOME/216public" ]; then
+  ln -s "$root_dir/0101/public" "$HOME/216public"
+else
+  echo "You already have a 216public link in your home directory."
+  failures=1
+fi
+
+if [ ! -e "$HOME/216" ]; then
+  ln -s "$root_dir/$section/student/$USER" "$HOME/216"
+else
+  echo "You already have a 216 link in your home directory."
+  failures=1
+fi
+
+if ! grep -q '#216FLAG' "$HOME/.cshrc.mine"; then
+  echo "tap -q java #216FLAG" >> "$HOME/.cshrc.mine"
+  echo "limit maxproc 20" >> "$HOME/.cshrc.mine"
+else
+  already_changed ".cshrc.mine"
+  failures=1
+fi
+
+if [[ "$failures" = 1 ]]; then
+  echo "Please talk to a TA about how to setup your account."
+fi

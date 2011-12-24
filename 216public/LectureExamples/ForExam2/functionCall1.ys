@@ -1,0 +1,23 @@
+main:    irmovl $0x1000, %esp
+         call   f
+         irmovl $1, %ebx
+         rmmovl %ebx, n
+         call   g
+         halt
+f:       call   g
+         ret
+g:       mrmovl n, %ecx
+Loop:    irmovl $0, %eax
+         addl   %eax, %ecx
+         jle    EndLoop
+         wrint  %ecx
+         irmovl $10, %esi
+         wrch %esi
+         irmovl $1, %edx
+         subl   %edx, %ecx
+         rmmovl %ecx, n
+         jmp    Loop
+EndLoop: ret
+         .align 4
+n:       .long 2
+

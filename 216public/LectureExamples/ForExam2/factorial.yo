@@ -1,0 +1,18 @@
+  0x000: f218         |           rdint  %ecx        # scanf("%d", &n);
+  0x002: 308301000000 |           irmovl $1,%ebx     # f = 1;
+  0x008: 308001000000 |           irmovl $1,%eax     # i = 1;
+  0x00e: 2007         |           rrmovl %eax,%edi   # tmp = i;
+  0x010: 6117         |           subl   %ecx,%edi   # tmp -= n;
+  0x012: 762a000000   |           jg     EndWhile    # if (tmp > 0) goto EndWhile;
+                      | 
+  0x017: 6403         | Loop:     multl  %eax,%ebx   # f *= i;
+  0x019: 308701000000 |           irmovl $1,%edi     # tmp = 1;
+  0x01f: 6070         |           addl   %edi,%eax   # i += tmp;
+  0x021: 2007         |           rrmovl %eax,%edi   # tmp = i;
+  0x023: 6117         |           subl   %ecx,%edi   # tmp -= n;
+  0x025: 7117000000   |           jle    Loop        # if (tmp <= 0) goto Loop;
+                      | 
+  0x02a: f338         | EndWhile: wrint  %ebx        # printf("%d", f);
+  0x02c: 30870a000000 |           irmovl $10,%edi    # tmp = '\n';
+  0x032: f178         |           wrch   %edi        # printf("%c", tmp);
+  0x034: 10           |           halt               # return 0;

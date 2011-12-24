@@ -1,0 +1,66 @@
+#!/bin/csh -f
+
+onintr CLEANUP
+limit vmemoryuse 60000000000
+
+#
+# Set these two variables appropriately for the course/semester.  The
+# path for the location of the submit.jar file is assumed below to be
+# the 0101/public/bin directory for the course's extra disk space.
+#
+set course = 216
+set semester = fall2011
+
+set pushdsilent
+
+set here = $cwd
+set tempfile = `mktemp -d -p /var/tmp`
+
+if (! -e .submit) then
+  echo "You can't do that here!"
+  echo "You must submit from inside the project directory."
+  exit 1
+endif
+
+if (-e .submitUser) then
+  rm -f .submitUser
+endif
+cp -r . $tempfile
+pushd $tempfile
+
+#
+# We don't want to delete students' actual files, so they're copied to a
+# temporary directory, those we don't want are removed, and the remainder
+# are submitted.  We need to copy the .submitUser file back to the original
+# directory where the command was run from, if there isn't one there already.
+#
+find . \( -name "*.o" -o -name "*.x" -o -name "core.*" -o -name "core*" \
+          -o -name "*.h.gch" -o -name "a.out" -o -name "public[0-9]*" \
+          -o -name "public[0-9][0-9]*" -o -name "secret[0-9]*" \
+          -o -name "secret[0-9][0-9]*" -o -name "*.so" -o -name "*.so.1" \
+          -o -name "*.gcda" -o -name "*.gcno" -o -name "*.html" \
+          -o -name "*.png" -o -name "*.css" -o -size +5000 \
+       \) -exec rm {} \;
+
+java -jar /afs/glue/class/${semester}/cmsc/${course}/0101/public/bin/submit.jar
+
+# if (!(-e $here/.submitUser)) then
+#   cp -f .submitUser $here 
+# endif
+
+popd
+
+cat <<EOF
+
+Note: you're responsible for logging into the submit server to verify that
+your submission compiled and worked properly (once the public tests are
+available).  Correct and resubmit it if not.
+
+Also be certain to carefully read the project requirements and submission
+requirements, and be sure you understand the project grading policies in the
+course syllabus.
+
+EOF
+
+CLEANUP:
+rm -rf $tempfile

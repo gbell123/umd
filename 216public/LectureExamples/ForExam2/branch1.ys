@@ -1,0 +1,15 @@
+	irmovl $3,%eax    # a = 3
+  	irmovl $4,%ebx    # b = 4
+  	rrmovl %eax,%esi  # s = a
+  	subl   %ebx,%esi  # s = s - b
+  	jge    Else       # if s >= 0 jump
+
+	wrint  %eax       # printf("%d", a)
+  	jmp    Endif      # jump
+
+Else:  	wrint  %ebx       # printf("%d", b)
+
+Endif: 	irmovl $10,%esi
+  	wrch   %esi       # printf("\n")
+  	halt 
+

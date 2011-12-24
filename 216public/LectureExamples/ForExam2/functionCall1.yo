@@ -1,0 +1,23 @@
+  0x000: 308400100000 | main:    irmovl $0x1000, %esp
+  0x006: 801d000000   |          call   f
+  0x00b: 308301000000 |          irmovl $1, %ebx
+  0x011: 403854000000 |          rmmovl %ebx, n
+  0x017: 8023000000   |          call   g
+  0x01c: 10           |          halt
+  0x01d: 8023000000   | f:       call   g
+  0x022: 90           |          ret
+  0x023: 501854000000 | g:       mrmovl n, %ecx
+  0x029: 308000000000 | Loop:    irmovl $0, %eax
+  0x02f: 6001         |          addl   %eax, %ecx
+  0x031: 7153000000   |          jle    EndLoop
+  0x036: f318         |          wrint  %ecx
+  0x038: 30860a000000 |          irmovl $10, %esi
+  0x03e: f168         |          wrch %esi
+  0x040: 308201000000 |          irmovl $1, %edx
+  0x046: 6121         |          subl   %edx, %ecx
+  0x048: 401854000000 |          rmmovl %ecx, n
+  0x04e: 7029000000   |          jmp    Loop
+  0x053: 90           | EndLoop: ret
+  0x054:              |          .align 4
+  0x054: 02000000     | n:       .long 2
+                      | 

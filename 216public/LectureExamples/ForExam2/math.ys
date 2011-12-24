@@ -1,0 +1,15 @@
+#to show the math operations of Y86
+irmovl $3,%eax   # a = 3
+irmovl $5,%ebx   # b = 5
+addl   %eax,%ebx # b = a + b
+wrint  %ebx
+irmovl $32,%esi  # 32 == ' '
+wrch   %esi
+irmovl $25, %ebx
+wrint  %eax
+irmovl $32,%esi  # 32 == ' '
+wrch   %esi
+wrint  %ebx
+irmovl $10,%esi  # 10 == '\n'
+wrch   %esi
+halt 

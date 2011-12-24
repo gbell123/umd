@@ -1,0 +1,7 @@
+AuthName "GLUE.UMD.EDU"
+AuthType Basic
+UseUMDKrbAuth On
+UseUMDHesiodAuth On
+UMDKrbAuthAuthoritative On
+
+require group Pharoahs GRACEadmins GRACE-fa11-cmsc216-0201

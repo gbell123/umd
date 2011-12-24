@@ -1,0 +1,24 @@
+main:      irmovl $0x1000, %esp  # init stack ptr
+           call   f
+           call   f
+           halt
+f:         pushl  %ebp           # save old frame ptr
+           rrmovl %esp, %ebp     # set new frame ptr
+           irmovl $16, %eax      # sub 16 (4 ints)
+           subl   %eax, %esp     #  from stack ptr
+           irmovl $30, %eax      # a = 30
+           rmmovl %eax, 12(%esp) # store a in stack
+           irmovl $25, %eax      # b = 25
+           rmmovl %eax, 8(%esp)  # store b in stack
+           mrmovl 12(%esp), %eax # load a
+           mrmovl 8(%esp), %ecx  # load b
+           addl   %eax, %ecx     # c = a + b
+           rmmovl %ecx, 4(%esp)  # store c in stack
+           mrmovl 4(%esp), %eax  # load c
+           wrint  %eax           # print c
+           irmovl $300, %eax     # d = 300
+           rmmovl %eax, 0(%esp)  # store d in stack
+           rrmovl %ebp, %esp     # reset stack ptr
+           popl   %ebp           # restore old frame
+           ret
+

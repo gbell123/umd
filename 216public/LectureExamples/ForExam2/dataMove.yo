@@ -1,0 +1,21 @@
+                      | # This is to show the different typed of data movement
+                      | # that can be done in Y86
+  0x000: 30850a000000 | irmovl $10, %ebp
+  0x006: 308237000000 | irmovl $55,%edx     # d = 55
+  0x00c: 2023         | rrmovl %edx,%ebx    # b = d
+  0x00e: 308034000000 | irmovl Array,%eax   # a = Array
+  0x014: f308         | wrint %eax
+  0x016: f158         | wrch %ebp
+  0x018: 403004000000 | rmmovl %ebx,4(%eax) # a[1] = 55
+  0x01e: f338         | wrint %ebx
+  0x020: f158         | wrch %ebp
+  0x022: f308         | wrint %eax
+  0x024: f158         | wrch %ebp
+  0x026: 501000000000 | mrmovl 0(%eax),%ecx # c = a[0]
+  0x02c: f318         | wrint %ecx
+  0x02e: f158         | wrch %ebp
+  0x030: 10           | halt
+  0x034:              |   .align 4
+  0x034:              | Array:
+  0x034: 6f000000     |   .long 0x6f
+  0x038: 84000000     |   .long 0x84

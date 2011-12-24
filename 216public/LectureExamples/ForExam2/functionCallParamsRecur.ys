@@ -1,0 +1,23 @@
+main:  irmovl $0x1000, %esp  # init stack ptr
+       irmovl $5, %eax       # load arg to reg
+       pushl  %eax           # push arg on stack
+       call   f
+       irmovl $10, %eax      # printf("\n");
+       wrch   %eax
+       halt                  # return 0;
+f:     pushl  %ebp           # save old frame ptr
+       rrmovl %esp, %ebp     # set new frame ptr
+       mrmovl 8(%ebp), %eax  # load i param
+       irmovl $0, %ecx       # load 0 to reg
+       addl   %ecx, %eax     # test value of i
+       jle    EndIf          # if i > 0, rec. call
+       irmovl $-1, %ecx 
+       addl   %eax, %ecx     # create i-1 arg
+       pushl  %ecx           # push arg on stack
+       call   f
+EndIf: mrmovl 8(%ebp), %eax  # load i param again
+       wrint  %eax           # print i
+       rrmovl %ebp, %esp     # reset stack ptr
+       popl   %ebp           # restore frame ptr 
+       ret
+

@@ -1,0 +1,15 @@
+main: irmovl $0x1000, %esp  # init stack ptr
+      irmovl $72, %eax      # load arg to reg
+      pushl  %eax           # push arg on stack
+      call   f				# puts return address onto the stack
+      irmovl $10, %eax      # printf("\n");
+      wrch   %eax
+      halt                  # return 0;
+f:    pushl  %ebp           # save old frame ptr
+      rrmovl %esp, %ebp     # set new frame ptr
+      mrmovl 8(%ebp), %eax  # load i param
+      wrint  %eax           # print i
+      rrmovl %ebp, %esp     # reset stack ptr
+      popl   %ebp           # restore frame ptr
+      ret
+

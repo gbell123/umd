@@ -1,0 +1,24 @@
+  0x000: 308400100000 | main:      irmovl $0x1000, %esp  # init stack ptr
+  0x006: 8011000000   |            call   f
+  0x00b: 8011000000   |            call   f
+  0x010: 10           |            halt
+  0x011: a058         | f:         pushl  %ebp           # save old frame ptr
+  0x013: 2045         |            rrmovl %esp, %ebp     # set new frame ptr
+  0x015: 308010000000 |            irmovl $16, %eax      # sub 16 (4 ints)
+  0x01b: 6104         |            subl   %eax, %esp     #  from stack ptr
+  0x01d: 30801e000000 |            irmovl $30, %eax      # a = 30
+  0x023: 40040c000000 |            rmmovl %eax, 12(%esp) # store a in stack
+  0x029: 308019000000 |            irmovl $25, %eax      # b = 25
+  0x02f: 400408000000 |            rmmovl %eax, 8(%esp)  # store b in stack
+  0x035: 50040c000000 |            mrmovl 12(%esp), %eax # load a
+  0x03b: 501408000000 |            mrmovl 8(%esp), %ecx  # load b
+  0x041: 6001         |            addl   %eax, %ecx     # c = a + b
+  0x043: 401404000000 |            rmmovl %ecx, 4(%esp)  # store c in stack
+  0x049: 500404000000 |            mrmovl 4(%esp), %eax  # load c
+  0x04f: f308         |            wrint  %eax           # print c
+  0x051: 30802c010000 |            irmovl $300, %eax     # d = 300
+  0x057: 400400000000 |            rmmovl %eax, 0(%esp)  # store d in stack
+  0x05d: 2054         |            rrmovl %ebp, %esp     # reset stack ptr
+  0x05f: b058         |            popl   %ebp           # restore old frame
+  0x061: 90           |            ret
+                      | 

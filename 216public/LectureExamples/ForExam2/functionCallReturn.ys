@@ -1,0 +1,25 @@
+main:  irmovl $0x1000, %esp  # init stack ptr
+       irmovl $5, %eax       # load arg to reg
+       pushl  %eax           # push arg on stack
+       call   f
+       rmmovl %eax, n        # store return value
+       mrmovl n, %eax        # load value of n
+       wrint  %eax
+       irmovl $10, %eax      # printf("\n");
+       wrch   %eax
+       halt                  # return 0;
+
+f:     pushl  %ebp           # save old frame ptr
+       rrmovl %esp, %ebp     # set new frame ptr
+       mrmovl 8(%ebp), %eax  # load param i
+       irmovl $1, %ecx       # m + 1
+       addl   %ecx, %eax     # add 1
+       irmovl $3, %ecx       # for * 3
+       multl  %ecx, %eax     # multiply by 3
+       rrmovl %ebp, %esp     # reset stack ptr
+       popl   %ebp           # restore frame ptr
+       ret
+
+       .align 4
+n:     .long 0
+

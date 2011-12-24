@@ -1,0 +1,70 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Date::Parse;
+use File::Basename;
+use File::stat;
+
+my $PROG = basename $0;
+
+sub usage {
+  print STDERR <<EOF;
+Usage: $PROG [-h] <root directory> <date string>
+
+   Reports the names of those submissions that were (a) submitted
+   before the specified deadline and (b) were a particular student's
+   last submission before the specified deadline.
+
+   Options:
+     -h   this help
+
+   The root directory is the directory containing all submissions for
+   the project.
+
+   The date string should be formatted in an unambiguous format,
+   e.g., "25 Mar 2010 06:00 PM" or "March 25, 2010 18:30".
+   Unless a time zone is supplied, the time is assumed to be local
+   time (DST will be used if applicable).
+
+   Ex. usage: $PROG ./project1 "Sep. 15, 2010 18:00:00"
+EOF
+  exit 64;
+}
+
+usage() if ! @ARGV || $ARGV[0] eq "-h";
+
+my $root_dir = shift;
+my $date_str = shift;
+
+usage() if ! defined($date_str);
+
+my $deadline = str2time($date_str);
+print STDERR "Deadline time is: @{[scalar localtime $deadline]}\n";
+print STDERR "Continue with selection (Y/n)? ";
+my $ans = <STDIN>;
+exit 0 if $ans =~ /^n/i;
+
+opendir DIR, $root_dir or die "$PROG: can't open $root_dir: $!\n";
+chdir $root_dir;
+my @dirs = grep { -d && ! /^\.\.?$/ } readdir DIR;
+closedir DIR;
+
+my %latest_submissions;
+my @on_time;
+for my $submission (@dirs) {
+  my $stat = stat($submission);
+  my $mtime = $stat->mtime;
+  if ($mtime <= $deadline) {
+    push @on_time, $submission;
+    my $user = $submission;
+    $user =~ s/\-\d+$//;
+    my $latest = $latest_submissions{$user};
+    if (! defined($latest) || $mtime > $latest->{"time"}) {
+      $latest_submissions{$user} = { "time" => $mtime, "name" => $submission };
+    }
+  }
+}
+for (sort keys %latest_submissions) {
+  print "$latest_submissions{$_}->{'name'}\n";
+}

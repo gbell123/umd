@@ -1,0 +1,19 @@
+This is th
+e file tha
+t will be 
+used
+for t
+he fileOpe
+n2.c examp
+le.
+It wil
+l create o
+r apend to
+ the file 
+named file
+out.txt
+in
+ this same
+ directory
+.
+irectory

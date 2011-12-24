@@ -1,0 +1,13 @@
+	rdint  %eax
+	irmovl $0,%edi    # consistent zero
+	irmovl $0,%esi    # sum = 0
+	addl   %edi,%eax
+	je     EndLoop
+Loop: 	addl   %eax,%esi  # sum += n
+	rdint  %eax
+	addl   %edi,%eax
+	jne    Loop
+EndLoop: wrint  %esi
+	irmovl $10,%ebx
+	wrch   %ebx
+	halt 

@@ -1,0 +1,10 @@
+#define SIZE 20
+#include <stdio.h>
+
+/* compile with no extra options and run
+   and then with -D SIZE=100 
+*/
+int main(){
+   printf("size = %d\n",SIZE);
+   return 0;
+}

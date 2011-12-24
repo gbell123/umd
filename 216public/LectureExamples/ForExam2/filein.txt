@@ -1,0 +1,4 @@
+This is the file that will be used
+for the fileOpen2.c example.
+It will create or apend to the file named fileout.txt
+in this same directory.

@@ -1,0 +1,21 @@
+# This is to show the different typed of data movement
+# that can be done in Y86
+irmovl $10, %ebp
+irmovl $55,%edx     # d = 55
+rrmovl %edx,%ebx    # b = d
+irmovl Array,%eax   # a = Array
+wrint %eax
+wrch %ebp
+rmmovl %ebx,4(%eax) # a[1] = 55
+wrint %ebx
+wrch %ebp
+wrint %eax
+wrch %ebp
+mrmovl 0(%eax),%ecx # c = a[0]
+wrint %ecx
+wrch %ebp
+halt
+  .align 4
+Array:
+  .long 0x6f
+  .long 0x84
